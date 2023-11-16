@@ -1,0 +1,34 @@
+
+session pga_regression {
+    top_dir : $ENV(MY_REGRESSION_AREA)/vmanager_sessions;
+    output_mode: log_only;
+    pre_session_script: "(cd $ENV(MY_REGRESSION_AREA)/rundir && make elab ELAB_PATH=$ENV(MY_REGRESSION_AREA)/rundir/)";
+    post_session_script: "source $ENV(MY_REGRESSION_AREA)/scripts/report_script.sh";
+    max_runs_in_parallel: 5;
+};
+
+group pga_tests {
+
+    count : 1;              
+    timeout : 13000000;     
+
+    test test_5ns {
+        run_script: "(cd $ENV(MY_REGRESSION_AREA)/rundir && make run A_TS_MON=5 NUM_TRANSACTIONS=5000)";
+        count : 100;
+    };
+
+    test test_25ns {
+        run_script: "(cd $ENV(MY_REGRESSION_AREA)/rundir && make run A_TS_MON=25 NUM_TRANSACTIONS=5000)";
+        count : 100; 
+    };
+
+    test test_50ns {
+        run_script: "(cd $ENV(MY_REGRESSION_AREA)/rundir && make run A_TS_MON=50 NUM_TRANSACTIONS=5000)";
+        count : 100;
+    };
+
+    test test_100ns {
+        run_script: "(cd $ENV(MY_REGRESSION_AREA)/rundir && make run A_TS_MON=100 NUM_TRANSACTIONS=5000)";
+        count : 100;
+    };
+};

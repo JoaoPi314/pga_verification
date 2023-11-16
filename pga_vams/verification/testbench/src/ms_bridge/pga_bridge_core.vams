@@ -1,0 +1,39 @@
+`timescale 1s/1ps
+`include "disciplines.vams"
+`include "constants.vams"
+
+module pga_bridge_core(INP, INN, GAIN, OUT);
+    
+    output OUT, INP, INN;
+    input [7:0] GAIN;
+
+    electrical INN, INP, OUT;
+
+    real a_in;
+    real bias_in;
+    real freq_in;
+    real pha_in;
+
+    analog begin
+        V(INP) <+ a_in * sin(2*`M_TWO_PI*freq_in*$abstime);
+        V(INN) <+ 0;
+
+        $bound_step(1/(freq_in*20));
+    end
+
+    initial begin 
+        freq_in = 10e6;
+        a_in = 0;
+        pha_in = 0;
+        bias_in = 0;
+    end
+    
+    function real get_inn_voltage(input dummy);
+        get_inn_voltage = V(INP, INN);
+    endfunction
+
+    function real get_out_voltage(input dummy);
+        get_out_voltage = V(OUT);
+    endfunction
+
+endmodule

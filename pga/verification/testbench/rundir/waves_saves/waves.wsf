@@ -1,0 +1,34 @@
+# Indago Command Script (Mon, 25 Sep 2023 15:34:31 -0300)
+#
+# Version 23.08.071-a
+
+#
+# Signal List
+#
+waveform add -trace_type analogSampleAndHold {pga_tb.pga.INN}
+waveform add -trace_type analogSampleAndHold {pga_tb.pga.INP}
+waveform divider add -name Divider
+waveform add -trace_type analogSampleAndHold {pga_tb.pga.OUTP}
+waveform add -trace_type analogSampleAndHold {pga_tb.pga.OUTN}
+waveform divider add -name Divider
+waveform expression add -trace_type analogSampleAndHold -traceColor #FF0000 {((-pga_tb.pga.INN) + pga_tb.pga.INP)}
+waveform expression add -trace_type analogSampleAndHold -traceColor #00FFFF {(pga_tb.pga.OUTP - pga_tb.pga.OUTN)}
+waveform divider add -name Divider
+waveform add {pga_tb.pga.PD}
+waveform add {pga_tb.pga.VCVGA}
+waveform divider add -name Divider
+waveform add {$uvm:{uvm_test_top.env.pga_a_agt.pga_drv}.analog_driver}
+waveform add {$uvm:{uvm_test_top.env.pga_a_agt.pga_mon}.analog_monitor_in}
+waveform add {$uvm:{uvm_test_top.env.pga_a_agt.pga_mon}.analog_monitor_out}
+waveform divider add -name Divider
+waveform add {$uvm:{uvm_test_top.env.pga_d_agt.pga_drv}.digital_driver}
+waveform add {$uvm:{uvm_test_top.env.pga_d_agt.pga_mon}.digital_monitor}
+
+#
+# Visible Time Range
+#
+waveform xview limits 2.606684ns 20.464332ns
+#
+# Insertion Point
+#
+waveform insertion {,17}

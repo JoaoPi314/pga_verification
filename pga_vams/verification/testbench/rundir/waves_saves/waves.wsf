@@ -1,0 +1,27 @@
+# Indago Command Script (Mon, 30 Oct 2023 13:09:09 -0300)
+#
+# Version 23.08.071-a
+
+#
+# Signal List
+#
+waveform add -radix d {pga_tb.pga.GAIN}
+waveform add -trace_type analogLinear {pga_tb.pga.INN}
+waveform add -trace_type analogLinear {pga_tb.pga.INP}
+waveform add -trace_type analogLinear {pga_tb.pga.OUT}
+waveform add {$uvm:{uvm_test_top.env.pga_a_agt.pga_drv}.analog_driver}
+waveform add {$uvm:{uvm_test_top.env.pga_a_agt.pga_mon}.analog_monitor_in}
+waveform add {$uvm:{uvm_test_top.env.pga_a_agt.pga_mon}.analog_monitor_out}
+waveform add {$uvm:{uvm_test_top.env.pga_d_agt.pga_drv}.digital_driver}
+waveform add {$uvm:{uvm_test_top.env.pga_d_agt.pga_mon}.digital_monitor}
+waveform expression add {abs(pga_tb.pga.OUT - 1.5 V)}
+waveform expression add -trace_type analogSampleAndHold -name {Absolute_Gain} {(10 ** ((40 - (0.25 * (255 - pga_tb.pga.GAIN))) / 20))}
+
+#
+# Visible Time Range
+#
+waveform xview limits 0ps 20,210,000ps
+#
+# Insertion Point
+#
+waveform insertion {,10}

@@ -1,0 +1,56 @@
+`timescale 1s/1ps
+
+module pga_bridge_core(OUTP, OUTN, INP, INN, VCVGA, VB, IBB, VDD, VSS, PD);
+    
+    output OUTP, OUTN, INP, INN;
+    input [2:0] VCVGA;
+    input VB, IBB;
+    inout VDD, VSS;
+    input PD;
+    
+    wreal OUTP, OUTN, INP, INN, VB, IBB, VDD, VSS;
+
+    real a_in;
+    real bias_in;
+    real freq_in;
+    real pha_in;
+
+    real VDD_in;
+    real VSS_in;
+    real IBB_in;
+    real VB_in;
+
+    wreal ampl_in;
+    wreal ampl_out;
+
+    wreal VDD_out;
+    wreal VSS_out;
+    wreal IBB_out;
+    wreal VB_out;
+    
+    real VINdif, VINcm;
+
+    initial begin 
+        freq_in = 10e6;
+        a_in = 0;
+        pha_in = 0;
+        bias_in = 0;
+    end
+        
+    always begin
+        #100p
+        VINdif = a_in*sin(2*3.14159265*freq_in*$abstime + pha_in);
+    end
+
+    assign INN = bias_in - VINdif/2;
+    assign INP = bias_in + VINdif/2;
+
+    assign VDD = VDD_in;
+    assign VSS = VSS_in;
+    assign VB = VB_in;
+    assign IBB = IBB_in;
+
+    assign ampl_out = (OUTP - OUTN);
+    assign ampl_in = (INP - INN);
+
+endmodule
